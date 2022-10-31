@@ -69,7 +69,7 @@ const removeUser = (req, res) => {
 
         pool.query(queries.removeUser, [user_id], (error,results) => {
             if (error) throw error;
-            res.status(200).send("Account removed succesfully!");
+            res.send(results.affectedRows);
         });
     });
 };
@@ -86,10 +86,12 @@ const updateUser = (req, res) => {
 
         pool.query(queries.updateUser, [name, user_id], (error, results) => {
             if (error) throw error;
-            res.status(200).send("Account updated successfully!");
+            res.status(200).send(req.body);
         });
     });
 }
+
+
 
 module.exports = {
     getUser,
@@ -97,4 +99,5 @@ module.exports = {
     addUser,
     removeUser,
     updateUser,
+  
 };
