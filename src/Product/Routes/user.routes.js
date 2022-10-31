@@ -1,6 +1,9 @@
 const express = require('express');
 const pool = require('../../../db');
 const bcrypt = require('bcrypt');
+const { Router } = require('express');
+const controller = require('../Controller/user.controller');
+const verify = require('./verifyToken');
 
 const router = express.Router();
 
@@ -21,10 +24,19 @@ router.post('/', async(req, res) => {
         req.body.user_id,
         req.body.email,
         hashedPassword]);
-        res.json({ users: newUser.rows[0]});    
+        res.json({ users: newUser.rows[0]});
+        res.send(newUser);    
     } catch (error) {
         res.status(500).json({ error : error.message });
     }
-})
+});
+
+router.get('/:id', verify, controller.getUserById);
+
+router.delete('/:id', verify, controller.removeUser);
+
+router.put("/:id", verify, controller.updateUser);
+
+//router.put("/:id", verify, controller.updateUserPassword);
 
 module.exports = router;
